@@ -51,8 +51,10 @@ flowchart TD
 - Docker Desktop, for the Qdrant server
 - A [Groq API key](https://console.groq.com/keys)
 
-### 1. Configure
+### 1. Clone and configure
 ```bash
+git clone https://github.com/shashismg/medibot-rbac-rag.git
+cd medibot-rbac-rag
 cp .env.example .env          # set GROQ_API_KEY and a random JWT_SECRET
 cp frontend/.env.local.example frontend/.env.local
 ```
