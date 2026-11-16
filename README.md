@@ -57,18 +57,22 @@ cp .env.example .env          # set GROQ_API_KEY and a random JWT_SECRET
 cp frontend/.env.local.example frontend/.env.local
 ```
 
-### 2. Start Qdrant
+### 2. Choose how Qdrant runs
+
+**Option A: Qdrant server (Docker).** Keep `QDRANT_URL=http://localhost:6333` in `.env`, then:
 ```bash
 docker compose up -d          # Qdrant on :6333 (dashboard: http://localhost:6333/dashboard)
 ```
-> **No Docker?** Leave `QDRANT_URL` empty in `.env`. MediBot then uses Qdrant's embedded on-disk mode (`backend/qdrant_local/`) with the identical Query API. Embedded mode allows only one process at a time, so stop the API before running the ingest/eval scripts or tests.
 
-### 3. Ingest documents (one-off)
+**Option B: no Docker (embedded mode).** Set `QDRANT_URL=` (empty) in `.env`. Nothing else to install. MediBot then runs Qdrant inside the Python process, stores data in `backend/qdrant_local/`, and uses the identical Query API, hybrid search and RBAC filters. Embedded mode allows **one process at a time**, so stop the API before running the ingest/eval scripts or tests.
+
+### 3. Install and ingest documents (one-off)
 ```bash
 cd backend
-uv sync
-uv run python -m scripts.ingest            # ~30 s after the first run's model download
+uv sync                                    # installs Python 3.12 + deps (torch, Docling): a few GB, first time only
+uv run python -m scripts.ingest            # first run downloads models (~1–2 min); then ~30 s
 ```
+> **First run needs internet.** It downloads the Docling layout/table models, the `bge-small` and BM25 encoders, and the `mxbai` reranker from Hugging Face. All are cached for later runs.
 ```
   [general  ] code_of_conduct.pdf               16 chunks {'text': 16}
   [clinical ] drug_formulary.pdf                14 chunks {'text': 4, 'table': 10}
