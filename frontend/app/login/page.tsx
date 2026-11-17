@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useLayoutEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { api, ApiError, saveSession } from "@/lib/api";
 import { DEMO_USERS, ROLE_META } from "@/lib/roles";
@@ -12,6 +12,17 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  // Next.js (cacheComponents) keeps this page mounted but hidden after we navigate to /chat.
+  // Reset transient state when it is hidden, so returning here never shows a stuck
+  // "Signing in…" button, disabled demo cards, or the previous user's password.
+  useLayoutEffect(() => {
+    return () => {
+      setLoading(false);
+      setPassword("");
+      setError(null);
+    };
+  }, []);
 
   async function doLogin(u: string, p: string) {
     setLoading(true);
