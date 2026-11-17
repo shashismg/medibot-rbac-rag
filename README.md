@@ -2,6 +2,8 @@
 
 MediBot is an internal knowledge assistant for **MediAssist Health Network**. Staff ask questions in natural language and get cited answers. Every retrieval is scoped to the documents the user's role is allowed to see, and that scope is **enforced inside the Qdrant query itself**.
 
+🎥 **Demo video:** [Watch the walkthrough on Loom](https://www.loom.com/share/e5346b45b5234652860688fb6f8f3e30)
+
 | Capability | Implementation |
 |---|---|
 | Structure-aware parsing | **Docling** (layout + TableFormer). Tables become Markdown tables. Headings are rebuilt into a hierarchy. |
