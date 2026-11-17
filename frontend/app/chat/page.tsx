@@ -35,7 +35,10 @@ export default function ChatPage() {
 
   function logout() {
     clearSession();
-    router.replace("/login");
+    // Full page load (not client-side navigation): with cacheComponents, Next.js keeps visited
+    // routes mounted in a hidden <Activity>, which would preserve this conversation and the login
+    // page's "signing in" state. On a shared workstation the next user must start from a clean slate.
+    window.location.replace("/login");
   }
 
   async function send(question: string) {
